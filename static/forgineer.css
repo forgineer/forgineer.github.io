@@ -1,0 +1,77 @@
+/* Original code : @thecodeplayer, Link Source Code : https://code.sololearn.com/Wj7ZWBg5m2OG/#html */
+@font-face {
+    font-family: matrix-code;
+    src: url('matrix.ttf');
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+        
+/* Page Settings */
+html {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, #fff 0%, #aaa 100%) no-repeat;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+  
+body {
+    text-align: center;
+    display: table;
+    background: black;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+  
+canvas {
+    display: block;
+    font-family: matrix-code;
+    background-color: black;
+}
+        
+#author {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color : red;
+    z-index : 1;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+    
+span {
+    font-size: 1.5em;
+    font-family: monospace;
+}
+  
+@keyframes cursor {
+    0% {
+        opacity: 0;
+    }
+      
+    40% {
+        opacity: 0;
+    }
+      
+    50% {
+        opacity: 1;
+    }
+      
+    90% {
+        opacity: 1;
+    }
+      
+    100% {
+        opacity: 0;
+    }
+}
+  
+a {
+    color: red;
+    text-decoration: none;
+}
