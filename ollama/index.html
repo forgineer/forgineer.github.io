@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ollama AI Chat</title>
+    <title>ForgeChat</title>
     
     <link rel="apple-touch-icon" sizes="120x120" href="../static/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
@@ -310,7 +310,7 @@
                 <!-- Branding logo / Title -->
                 <button type="button" class="btn btn-link p-0 text-decoration-none d-flex align-items-center gap-2 text-reset" id="logo-btn" title="Reset conversation">
                     <img src="../static/forgineer_avatar.png" alt="Logo" style="width: 32px; height: 32px;" class="rounded-circle">
-                    <strong class="fs-5 tracking-tight">TryOllama</strong>
+                    <strong class="fs-5 tracking-tight">ForgeChat</strong>
                 </button>
                 
                 <!-- Model Dropdown -->
@@ -345,7 +345,7 @@
                     <i class="bi bi-moon fs-5" id="theme-moon-icon"></i>
                 </button>
 
-                <button type="button" class="btn btn-icon btn-link text-reset rounded-circle p-2 d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#aboutModal" title="About TryOllama">
+                <button type="button" class="btn btn-icon btn-link text-reset rounded-circle p-2 d-flex align-items-center justify-content-center" data-bs-toggle="modal" data-bs-target="#aboutModal" title="About ForgeChat">
                     <i class="bi bi-info-circle fs-5"></i>
                 </button>
                 
@@ -472,7 +472,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow-lg border-0" style="border-radius: 1rem;">
                 <div class="modal-header border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold" id="aboutModalLabel">About TryOllama</h5>
+                    <h5 class="modal-title fw-bold" id="aboutModalLabel">About ForgeChat</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body py-3" style="max-height: 80vh; overflow-y: auto;">
@@ -483,7 +483,7 @@
                     <div class="card border-0 bg-secondary-subtle p-3 mb-2" style="border-radius: 0.5rem;">
                         <h6 class="fw-bold mb-1" style="font-size: 0.9rem;">Purpose</h6>
                         <p class="mb-0 text-muted small">
-                            TryOllama is designed to be a quick and easy way to use Ollama in the cloud or locally with a focus on simplicity and privacy.
+                            ForgeChat is designed to be a quick and easy way to use Ollama in the cloud or locally with a focus on simplicity and privacy.
                         </p>
                     </div>
                     
@@ -525,8 +525,8 @@
     <!-- Custom Chat Engine Scripts -->
     <script>
         // Storage Keys
-        const CONFIG_STORAGE_KEY = "tryollama.config";
-        const THEME_STORAGE_KEY = "tryollama.theme";
+        const CONFIG_STORAGE_KEY = "forgechat.config";
+        const THEME_STORAGE_KEY = "forgechat.theme";
 
         // Application State
         let config = {
@@ -609,7 +609,14 @@
 
         // Load Configuration from LocalStorage
         function loadConfig() {
-            const savedConfig = localStorage.getItem(CONFIG_STORAGE_KEY);
+            let savedConfig = localStorage.getItem(CONFIG_STORAGE_KEY);
+            if (!savedConfig) {
+                // Migrate from older tryollama storage key if exists
+                savedConfig = localStorage.getItem("tryollama.config");
+                if (savedConfig) {
+                    localStorage.setItem(CONFIG_STORAGE_KEY, savedConfig);
+                }
+            }
             if (savedConfig) {
                 try {
                     const parsed = JSON.parse(savedConfig);
@@ -635,7 +642,14 @@
 
         // Load & Apply Theme
         function loadTheme() {
-            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+            let savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+            if (!savedTheme) {
+                // Migrate from older tryollama theme key if exists
+                savedTheme = localStorage.getItem("tryollama.theme");
+                if (savedTheme) {
+                    localStorage.setItem(THEME_STORAGE_KEY, savedTheme);
+                }
+            }
             const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
             isDark = savedTheme ? savedTheme === "dark" : prefersDark;
             applyTheme();
