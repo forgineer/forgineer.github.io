@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgetris | forgineer</title>
+
+    <link rel="apple-touch-icon" sizes="120x120" href="../static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/favicon-16x16.png">
+    <link rel="manifest" href="../static/site.webmanifest">
+    <link rel="mask-icon" href="../static/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#00a300">
+    <meta name="theme-color" content="#0a0f0a">
+
+    <link rel="stylesheet" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="forgetris.css">
+    <script src="../static/bootstrap.bundle.min.js" defer></script>
+    <script src="audio.js" defer></script>
+    <script src="forgetris.js" defer></script>
+</head>
+<body class="bg-black text-light">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../static/forgineer_avatar.png" alt="Avatar Logo" style="width:40px;" class="rounded-pill">
+                <code class="text-danger">forgineer</code>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/forgineer" title="GitHub"><i class="bi bi-github"></i> GitHub</a>
+                    </li>
+                    <!--li class="nav-item">
+                        <a class="nav-link" href="https://forgineer.blogspot.com/" title="The Forge Notes"><i class="bi bi-journal-bookmark-fill"></i> Blog</a>
+                    </li-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.linkedin.com/in/blakephillips86/" title="LinkedIn"><i class="bi bi-linkedin"></i> LinkedIn</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-hammer"></i> Projects</a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="https://github.com/forgineer/billingplatform-py" title="BillingPlatform Python Lib">billingplatform-py</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/forgineer/bootstrap-budget" title="Bootstrap-Budget">bootstrap-budget</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/forgineer/duckdb-kettle-plugin" title="DuckDB Plugin for Pentaho Data Integration (Kettle)">duckdb-kettle-plugin</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-grid-fill"></i> Apps</a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="index.html" title="Forgetris - Matrix-themed Tetris">Forgetris</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-3 py-md-4">
+        <div class="forgetris-layout mx-auto">
+            <!-- Game Board -->
+            <section class="board-panel">
+                <div class="board-frame">
+                    <canvas id="board" width="300" height="600" aria-label="Forgetris game board"></canvas>
+                    <div id="overlay" class="board-overlay">
+                        <div class="overlay-card text-center">
+                            <h1 class="matrix-title mb-2">FORGETRIS</h1>
+                            <p id="overlay-subtitle" class="text-secondary small mb-3">
+                                Stack blocks. Clear lines. Beat the speed.
+                            </p>
+                            <div id="final-stats" class="mb-3 d-none">
+                                <div class="small text-secondary">FINAL SCORE</div>
+                                <div id="final-score" class="fs-3 fw-bold text-success font-monospace">0</div>
+                            </div>
+                            <button id="start-btn" class="btn btn-success px-4 fw-semibold">
+                                <i class="bi bi-play-fill"></i> Start Game
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Touch / On-screen Controls for Mobile -->
+                <div class="touch-controls d-md-none mt-3">
+                    <div class="d-flex justify-content-center gap-2 mb-2">
+                        <button type="button" class="btn btn-outline-success ctrl-btn" data-action="rotate" aria-label="Rotate">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-success ctrl-btn" data-action="hardDrop" aria-label="Hard Drop">
+                            <i class="bi bi-chevron-double-down"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-outline-success ctrl-btn" data-action="left" aria-label="Move Left">
+                            <i class="bi bi-arrow-left"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-success ctrl-btn" data-action="down" aria-label="Soft Drop">
+                            <i class="bi bi-arrow-down"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-success ctrl-btn" data-action="right" aria-label="Move Right">
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HUD / Sidebar -->
+            <aside class="hud-panel">
+                <div class="hud-card mb-3">
+                    <div class="hud-label">NEXT</div>
+                    <div class="next-wrap">
+                        <canvas id="next-canvas" width="120" height="96" aria-label="Next piece preview"></canvas>
+                    </div>
+                </div>
+
+                <div class="hud-card mb-3">
+                    <div class="stat-grid">
+                        <div>
+                            <div class="hud-label">SCORE</div>
+                            <div id="score" class="stat-value">0</div>
+                        </div>
+                        <div>
+                            <div class="hud-label">BEST</div>
+                            <div id="high-score" class="stat-value text-warning">0</div>
+                        </div>
+                        <div>
+                            <div class="hud-label">LEVEL</div>
+                            <div id="level" class="stat-value">1</div>
+                        </div>
+                        <div>
+                            <div class="hud-label">LINES</div>
+                            <div id="lines" class="stat-value">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hud-card mb-3">
+                    <div class="form-check form-switch d-flex align-items-center justify-content-between ps-0 mb-2">
+                        <label class="form-check-label small" for="grid-toggle">
+                            <i class="bi bi-grid-3x3 text-success me-1"></i> Show Grid
+                        </label>
+                        <input class="form-check-input ms-2" type="checkbox" role="switch" id="grid-toggle" checked>
+                    </div>
+                    <div class="form-check form-switch d-flex align-items-center justify-content-between ps-0 mb-3">
+                        <label class="form-check-label small" for="music-toggle">
+                            <i class="bi bi-music-note-beamed text-success me-1"></i> Music
+                        </label>
+                        <input class="form-check-input ms-2" type="checkbox" role="switch" id="music-toggle" checked>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button id="pause-btn" class="btn btn-outline-success btn-sm" disabled>
+                            <i class="bi bi-pause-fill"></i> Pause
+                        </button>
+                        <button id="restart-btn" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-arrow-counterclockwise"></i> Restart
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hud-card controls-card">
+                    <div class="hud-label mb-2">CONTROLS</div>
+                    <ul class="list-unstyled small mb-0 text-secondary">
+                        <li><kbd>&larr;</kbd> <kbd>&rarr;</kbd> Move</li>
+                        <li><kbd>&uarr;</kbd> / <kbd>Z</kbd> Rotate</li>
+                        <li><kbd>&darr;</kbd> Soft Drop</li>
+                        <li><kbd>Space</kbd> Hard Drop</li>
+                        <li><kbd>P</kbd> Pause &middot; <kbd>M</kbd> Music &middot; <kbd>R</kbd> Restart</li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>

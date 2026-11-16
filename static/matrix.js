@@ -20,10 +20,10 @@ var columns = c.width / font_size; // Number of columns for the rain
 // An array of drops - one per column
 var drops = [];
 
-// x below is the x coordinate
-// 1 = y co-ordinate of the drop (same for every drop initially)
+// Randomize initial y co-ordinate per column so rain starts scattered
+var rows = Math.ceil(c.height / font_size);
 for(var x = 0; x < columns; x++)
-    drops[x] = 1; 
+    drops[x] = Math.floor(Math.random() * rows);
 
     // Drawing the characters
     function draw() {
@@ -54,4 +54,16 @@ for(var x = 0; x < columns; x++)
             }
         }
 
-        setInterval(draw, 55);
+function startMatrix() {
+    // Pre-warm trails so the rain looks already in motion on first paint
+    for (var f = 0; f < 25; f++) {
+        draw();
+    }
+    setInterval(draw, 55);
+}
+
+if (document.fonts && document.fonts.load) {
+    document.fonts.load(font_size + "px matrix-code").then(startMatrix, startMatrix);
+} else {
+    startMatrix();
+}

@@ -14,5 +14,6 @@ Personal GitHub Pages landing page, portfolio, and collection of lightweight uti
 
 ## Conventions
 - Preserve the dark/Matrix aesthetic and responsive Bootstrap layout on the main landing page.
+- Keep the navigation bar consistent across `index.html` and all sub-app pages (same links and dropdowns, with relative paths adjusted per directory).
 - Use relative paths carefully so both root (`index.html`) and sub-app pages (`<app>/index.html`) resolve `static/` assets cleanly.
 - Do not remove commented-out nav or page items unless asked.
