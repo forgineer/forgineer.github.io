@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scat! | forgineer</title>
+
+    <link rel="apple-touch-icon" sizes="120x120" href="../static/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/favicon-16x16.png">
+    <link rel="manifest" href="../static/site.webmanifest">
+    <link rel="mask-icon" href="../static/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#00a300">
+    <meta name="theme-color" content="#0a0f0a">
+
+    <link rel="stylesheet" href="../static/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="scat.css">
+    <script src="../static/bootstrap.bundle.min.js" defer></script>
+    <script src="audio.js" defer></script>
+    <script src="scat.js" defer></script>
+</head>
+<body class="bg-black text-light">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../static/forgineer_avatar.png" alt="Avatar Logo" style="width:40px;" class="rounded-pill">
+                <code class="text-danger">forgineer</code>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/forgineer" title="GitHub"><i class="bi bi-github"></i> GitHub</a>
+                    </li>
+                    <!--li class="nav-item">
+                        <a class="nav-link" href="https://forgineer.blogspot.com/" title="The Forge Notes"><i class="bi bi-journal-bookmark-fill"></i> Blog</a>
+                    </li-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.linkedin.com/in/blakephillips86/" title="LinkedIn"><i class="bi bi-linkedin"></i> LinkedIn</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-hammer"></i> Projects</a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="https://github.com/forgineer/billingplatform-py" title="BillingPlatform Python Lib">billingplatform-py</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/forgineer/bootstrap-budget" title="Bootstrap-Budget">bootstrap-budget</a></li>
+                            <li><a class="dropdown-item" href="https://github.com/forgineer/duckdb-kettle-plugin" title="DuckDB Plugin for Pentaho Data Integration (Kettle)">duckdb-kettle-plugin</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-grid-fill"></i> Apps</a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="../forgetris/index.html" title="Forgetris - Matrix-themed Tetris">Forgetris</a></li>
+                            <li><a class="dropdown-item active" href="index.html" title="Scat! - Cozy Retro Cat Care Game">Scat!</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid px-2 px-md-4 py-3">
+        <div class="scat-container mx-auto">
+            <!-- Top Status Bar -->
+            <div class="hud-top-bar mb-2">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="scat-logo-badge">🐾 SCAT!</span>
+                        <span id="room-indicator" class="badge bg-dark border border-secondary text-light font-monospace">
+                            Living Room
+                        </span>
+                        <span id="time-indicator" class="badge time-badge">
+                            ☀️ Daytime (11:00 AM) — Cat Nap Hours
+                        </span>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="hud-label mb-0">HOUSEHOLD PURR-OMETER:</span>
+                            <div class="overall-meter-wrap">
+                                <div id="overall-happiness-bar" class="overall-meter-fill" style="width: 85%;"></div>
+                            </div>
+                            <span id="overall-happiness-val" class="small fw-bold font-monospace text-warning">85%</span>
+                        </div>
+
+                        <div class="d-flex align-items-center gap-1">
+                            <button id="toggle-time-btn" class="btn btn-sm btn-outline-info" title="Advance Day / Sunset / Night">
+                                <i class="bi bi-brightness-high"></i> Day/Night
+                            </button>
+                            <button id="music-btn" class="btn btn-sm btn-outline-success" title="Toggle Cozy Music">
+                                <i class="bi bi-music-note-beamed"></i>
+                            </button>
+                            <button id="sfx-btn" class="btn btn-sm btn-outline-success" title="Toggle Sound Effects">
+                                <i class="bi bi-volume-up-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Game Viewport -->
+            <div class="viewport-frame mb-3">
+                <canvas id="game-canvas" width="960" height="460" aria-label="Scat! Side-scrolling retro cat care game"></canvas>
+
+                <!-- Title / Welcome Overlay -->
+                <div id="title-overlay" class="game-overlay">
+                    <div class="overlay-card text-center">
+                        <div class="retro-subtitle mb-1">A COZY RETRO CAT-CARE ADVENTURE</div>
+                        <h1 class="scat-title mb-2">SCAT!</h1>
+                        <p class="text-light small mb-3 mx-auto" style="max-width: 520px;">
+                            Play as <strong>Mom (Teresa)</strong> taking care of her 6 beloved cats across the Living Room, Hallway, and Kitchen while <strong>Dad (William)</strong> snoozes in his big brown recliner watching a black-and-white Western!
+                        </p>
+                        <div class="cat-roster-preview mb-3">
+                            <span class="cat-pill tux">🐾 Mini (Tuxedo)</span>
+                            <span class="cat-pill tux">🐾 Stella (Tuxedo)</span>
+                            <span class="cat-pill tux">🐾 Otis (Tuxedo)</span>
+                            <span class="cat-pill orange">🐾 Jack (Orange)</span>
+                            <span class="cat-pill orange">🐾 Jill (Orange)</span>
+                            <span class="cat-pill calico">🐾 Cozette (Calico)</span>
+                        </div>
+                        <p class="text-warning small mb-3">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                            Watch your step! Stepping on a cat's tail makes them yowl and scamper off (press <kbd>W</kbd> or <kbd>&uarr;</kbd> to step carefully over tails!).
+                        </p>
+                        <button id="start-game-btn" class="btn btn-warning btn-lg px-4 fw-bold shadow">
+                            <i class="bi bi-play-fill"></i> Start Taking Care of the Cats
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Controls Bar (Works for Desktop & Mobile Touch) -->
+            <div class="controls-bar mb-3">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <!-- Movement Controls -->
+                    <div class="d-flex align-items-center gap-1">
+                        <button type="button" class="btn btn-dark border-secondary move-btn" id="btn-left" aria-label="Walk Left">
+                            <i class="bi bi-arrow-left"></i> <span class="d-none d-sm-inline">Left</span> <kbd class="d-none d-md-inline ms-1">A/&larr;</kbd>
+                        </button>
+                        <button type="button" class="btn btn-dark border-secondary move-btn" id="btn-hop" aria-label="Step Over Tail">
+                            <i class="bi bi-capslock"></i> <span class="d-none d-sm-inline">Step Over</span> <kbd class="d-none d-md-inline ms-1">W/&uarr;</kbd>
+                        </button>
+                        <button type="button" class="btn btn-dark border-secondary move-btn" id="btn-right" aria-label="Walk Right">
+                            <span class="d-none d-sm-inline">Right</span> <i class="bi bi-arrow-right"></i> <kbd class="d-none d-md-inline ms-1">D/&rarr;</kbd>
+                        </button>
+                    </div>
+
+                    <!-- Care Actions -->
+                    <div class="d-flex flex-wrap align-items-center gap-2">
+                        <button type="button" class="btn btn-warning fw-semibold action-btn" id="btn-smart" title="Smart Care Action near bowls, litter boxes, or cats">
+                            <i class="bi bi-stars"></i> Care / Interact <kbd class="ms-1 bg-dark text-warning">Space</kbd>
+                        </button>
+                        <button type="button" class="btn btn-outline-light action-btn" id="btn-feed" title="Pour Kibble & Treats">
+                            🥣 Feed <kbd class="ms-1">1</kbd>
+                        </button>
+                        <button type="button" class="btn btn-outline-light action-btn" id="btn-scoop" title="Scoop Nearby Litter Box">
+                            🧹 Scoop Litter <kbd class="ms-1">2</kbd>
+                        </button>
+                        <button type="button" class="btn btn-outline-light action-btn" id="btn-play" title="Wave Feather Wand Toy">
+                            🪶 Feather Wand <kbd class="ms-1">3</kbd>
+                        </button>
+                        <button type="button" class="btn btn-outline-light action-btn" id="btn-pet" title="Pet & Cuddle Nearby Cat">
+                            💕 Pet / Call <kbd class="ms-1">4</kbd>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6 Cats Happiness Dashboard + House Status -->
+            <div class="row g-2">
+                <div class="col-12 col-lg-9">
+                    <div class="hud-panel-card">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="hud-section-title">🐾 TERESA'S 6 CATS — HAPPINESS &amp; STATUS (CLICK A CAT TO LOCATE)</span>
+                            <span id="litter-summary" class="small font-monospace text-info">Litter Boxes: 3/3 Clean ✨</span>
+                        </div>
+                        <div id="cats-hud-grid" class="cats-grid">
+                            <!-- Populated dynamically by scat.js -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3">
+                    <div class="hud-panel-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="hud-section-title mb-2">🏡 HOUSEHOLD NOTES</div>
+                            <div id="activity-log" class="activity-log small">
+                                <div>Welcome home! Teresa is ready to spoil the cats.</div>
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-top border-secondary small text-secondary">
+                            <div><strong class="text-light">Daytime:</strong> Cats love napping in the cat trees &amp; couch.</div>
+                            <div><strong class="text-light">Nighttime:</strong> Playful zoomies across the house!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
